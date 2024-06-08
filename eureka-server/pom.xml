@@ -13,4 +13,10 @@
 	<name>Eureka Server</name>
 	<description>Service Discovery Server</description>
 
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
+		</dependency>
+	</dependencies>
 </project>
