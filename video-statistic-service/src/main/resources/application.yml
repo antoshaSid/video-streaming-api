@@ -1,6 +1,9 @@
 spring:
   application:
     name: video-statistic-service
+  mvc:
+    servlet:
+      path: /api
 
 eureka:
   client:
