@@ -9,6 +9,17 @@ services:
     networks:
       - microservices-network
 
+  migration-service:
+    build:
+      context: ./migration-service/docker
+      dockerfile: Dockerfile
+    ports:
+      - "8084:8084"
+    depends_on:
+      - postgres
+    networks:
+      - microservices-network
+
   api-gateway-service:
     build:
       context: ./api-gateway-service/docker
