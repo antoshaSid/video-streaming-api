@@ -7,5 +7,5 @@ public final class KafkaConsumerGroup {
 
     public static final String DELIST_VIDEO_CONSUMER_GROUP = "delist-video-consumer-group";
 
-    public static final String SUCCESS_PUBLISH_VIDEO_CONSUMER_GROUP = "success-publish-video-consumer-group";
+    public static final String SUCCESS_PUBLISH_VIDEO_CONSUMER_GROUP = "metadata-success-publish-video-consumer-group";
 }
