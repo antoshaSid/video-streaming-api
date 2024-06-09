@@ -5,6 +5,7 @@ import com.asidliar.video.metadata.service.messages.SuccessPublishVideoMessage;
 import com.asidliar.video.metadata.service.repositories.VideoMetadataRepository;
 import com.asidliar.video.metadata.service.utils.KafkaConsumerGroup;
 import com.asidliar.video.metadata.service.utils.KafkaTopic;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -14,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
+@Slf4j
 public class SuccessPublishVideoConsumerImpl implements SuccessPublishVideoConsumer {
 
     private final VideoMetadataRepository videoMetadataRepository;
@@ -28,13 +30,19 @@ public class SuccessPublishVideoConsumerImpl implements SuccessPublishVideoConsu
     @Override
     public void successPublishVideo(final ConsumerRecord<Long, SuccessPublishVideoMessage> record,
                                     final Acknowledgment acknowledgment) {
-        final SuccessPublishVideoMessage videoMessage = record.value();
-        final VideoMetadataEntity videoMetadata = VideoMetadataEntity.builder()
-            .id(videoMessage.videoId())
-            .title(videoMessage.title())
-            .isDeleted(false)
-            .build();
+        try {
+            final SuccessPublishVideoMessage videoMessage = record.value();
+            final VideoMetadataEntity videoMetadata = VideoMetadataEntity.builder()
+                .id(videoMessage.videoId())
+                .title(videoMessage.title())
+                .isDeleted(false)
+                .build();
 
-        videoMetadataRepository.save(videoMetadata);
+            videoMetadataRepository.save(videoMetadata);
+            acknowledgment.acknowledge();
+        } catch (final Exception e) {
+            log.error("Error while processing success publish video message", e);
+            throw e;
+        }
     }
 }
