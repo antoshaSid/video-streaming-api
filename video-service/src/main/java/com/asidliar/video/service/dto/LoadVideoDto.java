@@ -10,11 +10,25 @@ import lombok.Value;
 public class LoadVideoDto {
 
     Long videoId;
+    String content;
     String title;
     String synopsis;
     String director;
     String cast;
     Short yearOfRelease;
     String genre;
-    Short runningTime;
+    Long runningTime;
+
+    public LoadVideoDto(final VideoMetadataDto videoMetadata, final String content) {
+        this.videoId = videoMetadata.getVideoId();
+        this.content = content;
+        this.title = videoMetadata.getTitle();
+        this.synopsis = videoMetadata.getSynopsis();
+        this.director = videoMetadata.getDirector();
+        this.cast = videoMetadata.getCast();
+        this.yearOfRelease = videoMetadata.getYear();
+        this.genre = videoMetadata.getGenre();
+        this.runningTime = videoMetadata.getRunningTime();
+
+    }
 }

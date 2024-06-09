@@ -3,6 +3,7 @@ package com.asidliar.video.service.services;
 import com.asidliar.video.service.dto.LoadVideoDto;
 import com.asidliar.video.service.dto.PlayVideoDto;
 import com.asidliar.video.service.dto.PublishVideoDto;
+import com.asidliar.video.service.dto.VideoMetadataDto;
 import com.asidliar.video.service.messages.PublishVideoMessage;
 import com.asidliar.video.service.repositories.VideoRepository;
 import com.asidliar.video.service.services.producers.DelistVideoProducer;
@@ -12,6 +13,7 @@ import com.asidliar.video.service.services.producers.VideoViewProducer;
 import jakarta.ws.rs.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 @Service
 public class VideoServiceImpl implements VideoService {
@@ -21,18 +23,21 @@ public class VideoServiceImpl implements VideoService {
     private final VideoImpressionProducer videoImpressionProducer;
     private final VideoViewProducer videoViewProducer;
     private final VideoRepository videoRepository;
+    private final RestTemplate restTemplate;
 
     @Autowired
     public VideoServiceImpl(final PublishVideoProducer publishVideoProducer,
                             final DelistVideoProducer delistVideoProducer,
                             final VideoImpressionProducer videoImpressionProducer,
                             final VideoViewProducer videoViewProducer,
-                            final VideoRepository videoRepository) {
+                            final VideoRepository videoRepository,
+                            final RestTemplate restTemplate) {
         this.publishVideoProducer = publishVideoProducer;
         this.delistVideoProducer = delistVideoProducer;
         this.videoImpressionProducer = videoImpressionProducer;
         this.videoViewProducer = videoViewProducer;
         this.videoRepository = videoRepository;
+        this.restTemplate = restTemplate;
     }
 
     @Override
@@ -47,8 +52,13 @@ public class VideoServiceImpl implements VideoService {
 
     @Override
     public LoadVideoDto loadVideo(final Long videoId) {
-        videoImpressionProducer.increaseVideoImpression(videoId);
-        return null;
+        return videoRepository.findById(videoId)
+            .map(video -> {
+                final String url = "http://video-metadata-service/api/video/metadata/" + videoId;
+                final VideoMetadataDto videoMetadata = restTemplate.getForObject(url, VideoMetadataDto.class);
+                videoImpressionProducer.increaseVideoImpression(videoId);
+                return new LoadVideoDto(videoMetadata, video.getContent());
+        }).orElseThrow(() -> new NotFoundException("Video not found"));
     }
 
     @Override
