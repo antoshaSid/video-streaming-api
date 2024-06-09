@@ -36,7 +36,7 @@ public class VideoResource {
     public ResponseEntity<String> deleteVideo(@PathVariable final Long videoId) {
         videoService.deleteVideo(videoId);
         return ResponseEntity.accepted()
-            .build(); // TODO: async response
+            .build();
     }
 
     @GetMapping("/{videoId}/play")

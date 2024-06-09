@@ -9,15 +9,15 @@ import org.springframework.stereotype.Service;
 @Service
 public class PublishVideoProducerImpl implements PublishVideoProducer {
 
-    private final KafkaTemplate<String, PublishVideoMessage> kafkaTemplate;
+    private final KafkaTemplate<Long, PublishVideoMessage> kafkaTemplate;
 
     @Autowired
-    public PublishVideoProducerImpl(KafkaTemplate<String, PublishVideoMessage> kafkaTemplate) {
+    public PublishVideoProducerImpl(KafkaTemplate<Long, PublishVideoMessage> kafkaTemplate) {
         this.kafkaTemplate = kafkaTemplate;
     }
 
     @Override
-    public void publishVideo(final PublishVideoMessage unpublishedVideo) {
-        kafkaTemplate.send(KafkaTopic.PUBLISH_VIDEO, unpublishedVideo);
+    public void publishVideo(final PublishVideoMessage publishVideo) {
+        kafkaTemplate.send(KafkaTopic.PUBLISH_VIDEO, publishVideo);
     }
 }
