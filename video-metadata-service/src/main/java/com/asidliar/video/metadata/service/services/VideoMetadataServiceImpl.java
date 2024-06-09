@@ -3,6 +3,7 @@ package com.asidliar.video.metadata.service.services;
 import com.asidliar.video.metadata.service.dto.VideoMetadataDto;
 import com.asidliar.video.metadata.service.entities.VideoMetadataEntity;
 import com.asidliar.video.metadata.service.repositories.VideoMetadataRepository;
+import jakarta.ws.rs.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -64,7 +65,7 @@ public class VideoMetadataServiceImpl implements VideoMetadataService {
 
             return new VideoMetadataDto(videoMetadataRepository.save(videoMetadata));
         } else {
-            throw new IllegalArgumentException("Video metadata not found");
+            throw new NotFoundException("Video metadata not found");
         }
     }
 

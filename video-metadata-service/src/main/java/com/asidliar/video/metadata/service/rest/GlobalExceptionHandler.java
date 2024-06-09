@@ -1,5 +1,6 @@
 package com.asidliar.video.metadata.service.rest;
 
+import jakarta.ws.rs.NotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -26,9 +27,8 @@ public class GlobalExceptionHandler {
             .body(errors);
     }
 
-    @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<String> handleIllegalArgumentException(final IllegalArgumentException ex) {
-        return ResponseEntity.badRequest()
-            .body(ex.getMessage());
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<?> handleIllegalArgumentException() {
+        return ResponseEntity.notFound().build();
     }
 }
