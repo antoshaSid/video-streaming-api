@@ -1,6 +1,9 @@
 package com.asidliar.video.service.rest;
 
+import com.asidliar.video.service.dto.LoadVideoDto;
+import com.asidliar.video.service.dto.PublishVideoDto;
 import com.asidliar.video.service.services.VideoService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,22 +21,26 @@ public class VideoResource {
     }
 
     @PostMapping
-    public ResponseEntity<String> publishVideo() {
-        return null;
+    public ResponseEntity<String> publishVideo(@Valid @RequestBody final PublishVideoDto video) {
+        videoService.publishVideo(video);
+        return ResponseEntity.accepted()
+            .build(); // TODO: async response
     }
 
     @GetMapping("/{videoId}")
-    public ResponseEntity<String> loadVideo(@PathVariable final Long videoId) {
-        return null;
+    public ResponseEntity<LoadVideoDto> loadVideo(@PathVariable final Long videoId) {
+        return ResponseEntity.ok(videoService.loadVideo(videoId));
     }
 
     @DeleteMapping("/{videoId}")
     public ResponseEntity<String> deleteVideo(@PathVariable final Long videoId) {
-        return null;
+        videoService.deleteVideo(videoId);
+        return ResponseEntity.accepted()
+            .build(); // TODO: async response
     }
 
     @GetMapping("/{videoId}/play")
     public SseEmitter playVideo(@PathVariable final Long videoId) {
-        return null;
+        return null; // TODO: implement
     }
 }

@@ -1,15 +1,13 @@
 package com.asidliar.video.service.entities;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "VIDEOS")
 @NoArgsConstructor
-@AllArgsConstructor
-@Builder
+@Getter
 public class VideoEntity {
 
     @Id
@@ -18,4 +16,8 @@ public class VideoEntity {
 
     @Column(nullable = false)
     private String content;
+
+    public VideoEntity(final String content) {
+        this.content = content;
+    }
 }
