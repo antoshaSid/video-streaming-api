@@ -4,6 +4,28 @@ spring:
   mvc:
     servlet:
       path: /api
+  datasource:
+    url: jdbc:postgresql://localhost:5433/video_streaming_api_db
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      auto-offset-reset: latest
+      key-deserializer: org.apache.kafka.common.serialization.LongDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      enable-auto-commit: false
+    listener:
+      ack-mode: manual
+      concurrency: 3
 
 eureka:
   client:
