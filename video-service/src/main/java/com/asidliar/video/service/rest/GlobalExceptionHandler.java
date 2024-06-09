@@ -20,7 +20,6 @@ public class GlobalExceptionHandler {
             if (error instanceof FieldError fieldError) {
                 errors.put(fieldError.getField(), error.getDefaultMessage());
             }
-
         });
 
         return ResponseEntity.badRequest()

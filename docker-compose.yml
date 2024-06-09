@@ -39,6 +39,7 @@ services:
       - "8081:8081"
     depends_on:
       - eureka-server
+      - migration-service
     networks:
       - microservices-network
 
@@ -50,6 +51,7 @@ services:
       - "8082:8082"
     depends_on:
       - eureka-server
+      - migration-service
     networks:
       - microservices-network
 
@@ -61,6 +63,7 @@ services:
       - "8083:8083"
     depends_on:
       - eureka-server
+      - migration-service
     networks:
       - microservices-network
 

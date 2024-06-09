@@ -39,7 +39,7 @@ public class PublishVideoConsumerImpl implements PublishVideoConsumer {
             VideoEntity newVideo = new VideoEntity(message.content());
             newVideo = videoRepository.save(newVideo);
 
-            successPublishVideoProducer.successPublishVideo(new SuccessPublishVideoMessage(newVideo.getId(), message.title(), message.content()));
+            successPublishVideoProducer.successPublishVideo(new SuccessPublishVideoMessage(newVideo.getId(), message.title()));
 
             acknowledgment.acknowledge();
         } catch (final Exception e) {

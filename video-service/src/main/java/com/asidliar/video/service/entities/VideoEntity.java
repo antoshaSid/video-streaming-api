@@ -1,13 +1,13 @@
 package com.asidliar.video.service.entities;
 
 import jakarta.persistence.*;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "VIDEOS")
 @NoArgsConstructor
-@Getter
+@Data
 public class VideoEntity {
 
     @Id
