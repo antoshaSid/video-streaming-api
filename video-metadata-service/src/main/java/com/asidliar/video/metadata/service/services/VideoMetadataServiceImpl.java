@@ -25,6 +25,13 @@ public class VideoMetadataServiceImpl implements VideoMetadataService {
     }
 
     @Override
+    public VideoMetadataDto getVideoMetadata(final Long videoId) {
+        return videoMetadataRepository.findById(videoId)
+            .map(VideoMetadataDto::new)
+            .orElseThrow(() -> new NotFoundException("Video metadata not found"));
+    }
+
+    @Override
     public VideoMetadataDto updateVideoMetadata(final VideoMetadataDto videoMetadataDto) {
         Optional<VideoMetadataEntity> optional = videoMetadataRepository.findById(videoMetadataDto.getVideoId());
 
@@ -76,7 +83,9 @@ public class VideoMetadataServiceImpl implements VideoMetadataService {
     }
 
     @Override
-    public List<VideoMetadataDto> searchVideoMetadata(String query) {
-        return List.of();
+    public List<VideoMetadataDto> searchVideoMetadata(final String query) {
+        return videoMetadataRepository.searchByQuery(query).stream()
+            .map(VideoMetadataDto::new)
+            .toList();
     }
 }

@@ -4,9 +4,12 @@ import com.asidliar.video.metadata.service.dto.VideoMetadataDto;
 import com.asidliar.video.metadata.service.services.VideoMetadataService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/video/metadata")
@@ -19,19 +22,24 @@ public class VideoMetadataResource {
         this.videoMetadataService = videoMetadataService;
     }
 
+    @GetMapping("/{videoId}")
+    ResponseEntity<VideoMetadataDto> getVideoMetadata(@PathVariable final Long videoId) {
+        return ResponseEntity.ok(videoMetadataService.getVideoMetadata(videoId));
+    }
+
     @PatchMapping
-    ResponseEntity<?> updateVideoMetadata(@Valid @RequestBody VideoMetadataDto videoMetadata) {
+    ResponseEntity<VideoMetadataDto> updateVideoMetadata(@Valid @RequestBody VideoMetadataDto videoMetadata) {
         return ResponseEntity.ok(videoMetadataService.updateVideoMetadata(videoMetadata));
     }
 
     @GetMapping("/all")
-    ResponseEntity<?> getAllVideoMetadata(@RequestParam("page") final Integer pageNumber,
-                                          @RequestParam("size") final Integer pageSize) {
+    ResponseEntity<Page<VideoMetadataDto>> getAllVideoMetadata(@RequestParam("page") final Integer pageNumber,
+                                                               @RequestParam("size") final Integer pageSize) {
         return ResponseEntity.ok(videoMetadataService.getAllVideoMetadata(PageRequest.of(pageNumber, pageSize)));
     }
 
     @GetMapping("/search")
-    ResponseEntity<?> searchVideoMetadata(@RequestParam final String query) { // TODO: Implement search functionality
-        return null;
+    ResponseEntity<List<VideoMetadataDto>> searchVideoMetadata(@RequestParam final String query) {
+        return ResponseEntity.ok(videoMetadataService.searchVideoMetadata(query));
     }
 }

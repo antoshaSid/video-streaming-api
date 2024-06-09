@@ -8,6 +8,8 @@ import java.util.List;
 
 public interface VideoMetadataService {
 
+    VideoMetadataDto getVideoMetadata(Long videoId);
+
     VideoMetadataDto updateVideoMetadata(VideoMetadataDto videoMetadata);
 
     Page<VideoMetadataDto> getAllVideoMetadata(Pageable pageable);
