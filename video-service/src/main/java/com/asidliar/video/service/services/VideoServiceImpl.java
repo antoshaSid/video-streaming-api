@@ -54,10 +54,14 @@ public class VideoServiceImpl implements VideoService {
     public LoadVideoDto loadVideo(final Long videoId) {
         return videoRepository.findById(videoId)
             .map(video -> {
-                final String url = "http://video-metadata-service/api/video/metadata/" + videoId;
-                final VideoMetadataDto videoMetadata = restTemplate.getForObject(url, VideoMetadataDto.class);
-                videoImpressionProducer.increaseVideoImpression(videoId);
-                return new LoadVideoDto(videoMetadata, video.getContent());
+                final VideoMetadataDto videoMetadata = this.getVideoMetadata(videoId);
+
+                if (videoMetadata != null && !videoMetadata.getIsDeleted()) {
+                    videoImpressionProducer.increaseVideoImpression(videoId);
+                    return new LoadVideoDto(videoMetadata, video.getContent());
+                } else {
+                    return null;
+                }
         }).orElseThrow(() -> new NotFoundException("Video not found"));
     }
 
@@ -65,8 +69,19 @@ public class VideoServiceImpl implements VideoService {
     public PlayVideoDto playVideo(final Long videoId) {
         return videoRepository.findById(videoId)
             .map(video -> {
-                videoViewProducer.increaseVideoView(videoId);
-                return new PlayVideoDto(video);
+                final VideoMetadataDto videoMetadata = this.getVideoMetadata(videoId);
+
+                if (videoMetadata != null && !videoMetadata.getIsDeleted()) {
+                    videoViewProducer.increaseVideoView(videoId);
+                    return new PlayVideoDto(video);
+                } else {
+                    return null;
+                }
             }).orElseThrow(() -> new NotFoundException("Video not found"));
+    }
+
+    private VideoMetadataDto getVideoMetadata(final Long videoId) {
+        final String url = "http://video-metadata-service/api/video/metadata/" + videoId;
+        return restTemplate.getForObject(url, VideoMetadataDto.class);
     }
 }
